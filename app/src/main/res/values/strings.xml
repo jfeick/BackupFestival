@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">backup Festival</string>
+
+    <string name="action_settings">Settings</string>
+
+
+    <!-- Drawer Items -->
+    <string name="drawer_events">Events</string>
+    <string name="drawer_films">Films</string>
+
+</resources>

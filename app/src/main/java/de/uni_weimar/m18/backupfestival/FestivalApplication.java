@@ -1,7 +1,10 @@
-package de.uni_weimar.m18.backupfestival.views.adapters;
+package de.uni_weimar.m18.backupfestival;
+
+import android.app.Application;
+import android.content.Context;
 
 /**
- * Created by Jan Frederick Eick on 29.04.2015.
+ * Created by Jan Frederick Eick on 28.04.2015.
  * Copyright 2015 Jan Frederick Eick
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,6 +18,21 @@ package de.uni_weimar.m18.backupfestival.views.adapters;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-public class ImageAdapter {
+public class FestivalApplication extends Application {
+    private static Context context;
 
+    public static Context getContext() {
+        return context;
+    }
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        context = getApplicationContext();
+    }
+
+    @Override
+    public void onTerminate() {
+        super.onTerminate();
+    }
 }

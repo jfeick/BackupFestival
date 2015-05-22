@@ -42,4 +42,14 @@
     <color name="about_libraries_text_openSource">#DEDEDE</color>
     <color name="about_libraries_dividerDark_openSource">#303030</color>
     <color name="about_libraries_dividerLight_openSource">#303030</color>
+
+
+    <!-- colors for film tabs -->
+    <color name="films_standard">#110606</color>
+    <color name="films_award_blue">#0d47a1</color>
+    <color name="films_award_green">#1b5e20</color>
+    <color name="films_award_pink">#880e4f</color>
+    <color name="films_award_purple">#4a148c</color>
+    <color name="films_award_red">#b71c1c</color>
+    <color name="films_award_yellow">#f57f17</color>
 </resources>

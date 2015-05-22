@@ -62,11 +62,28 @@ public class FilmModel implements Serializable {
             try {
                 return terms.special.get(0).getName();
             } catch (Exception e) {
-                return "";
+                return null;
             }
         }
-        return "";
+        return null;
 
+    }
+
+    public boolean isAward() {
+        if(terms != null && terms.award != null && terms.award.size() >= 1)
+            return true;
+        return false;
+    }
+
+    public String getAward() {
+        if(isAward()) {
+            try {
+                return terms.award.get(0).getName();
+            } catch (Exception e) {
+                return null;
+            }
+        }
+        return null;
     }
 
     public Featured_image getFeatured_image() {

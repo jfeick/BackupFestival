@@ -78,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
             actionBar.setHomeButtonEnabled(true);
         }
 
-        FilmsPagerAdapter adapterViewPager = new FilmsPagerAdapter(getSupportFragmentManager());
+        FilmsPagerAdapter adapterViewPager = new FilmsPagerAdapter(getSupportFragmentManager(), mViewPager);
         mViewPager.getViewPager().setAdapter(adapterViewPager);
         mViewPager.getPagerTitleStrip().setViewPager(mViewPager.getViewPager());
 

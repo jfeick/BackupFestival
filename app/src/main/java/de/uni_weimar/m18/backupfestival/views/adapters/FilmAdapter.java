@@ -7,6 +7,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.os.Build;
 import android.support.v7.graphics.Palette;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -95,7 +96,7 @@ public class FilmAdapter extends RecyclerView.Adapter<ImagesViewHolder> {
     public void onBindViewHolder(final ImagesViewHolder holder, final int position) {
 
         final FilmModel currentFilm = mImages.get(position);
-        holder.imageAuthor.setText(currentFilm.getTitle());
+        holder.imageAuthor.setText(Html.fromHtml(currentFilm.getTitle()));
         holder.imageDate.setText(currentFilm.getSpecial());
         holder.imageView.setImageBitmap(null);
 

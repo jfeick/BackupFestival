@@ -6,7 +6,7 @@ android {
 
     defaultConfig {
         applicationId "de.uni_weimar.m18.backupfestival"
-        minSdkVersion 14
+        minSdkVersion 16
         targetSdkVersion 22
         versionCode 10
         versionName "0.1.0"
@@ -36,5 +36,7 @@ dependencies {
     compile('com.mikepenz.materialdrawer:library:2.9.1@aar') {
         transitive = true
     }
-
+    compile ('com.github.florent37:materialviewpager:1.0.3.3@aar'){
+        transitive = true
+    }
 }

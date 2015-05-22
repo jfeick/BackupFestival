@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-
+<!--
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -7,6 +7,9 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+-->
+
+    <!--
     <RelativeLayout
         android:id="@+id/activity_main_toolbar_container"
         android:layout_width="wrap_content"
@@ -21,14 +24,57 @@
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
             android:elevation="4dp" />
     </RelativeLayout>
+    -->
 
-
-    <fragment android:name="de.uni_weimar.m18.backupfestival.fragments.FilmsFragment"
-    android:id="@+id/ly_last_films_fragment"
-    android:layout_gravity="center"
+<FrameLayout
+    android:id="@+id/main_film_container"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_width="match_parent"/>
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <com.github.florent37.materialviewpager.MaterialViewPager
+        android:id="@+id/materialViewPager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:viewpager_logo="@layout/header_films_logo"
+        app:viewpager_logoMarginTop="80dp"
+        app:viewpager_color="@color/primary"
+        app:viewpager_headerHeight="160dp"
+        app:viewpager_headerAlpha="1.0"
+        app:viewpager_hideLogoWithFade="true"
+        app:viewpager_hideToolbarAndTitle="false"
+        app:viewpager_enableToolbarElevation="true"
+        app:viewpager_parallaxHeaderFactor="1.5"
+        app:viewpager_headerAdditionalHeight="20dp"
+        app:viewpager_pagerTitleStrip="@layout/material_view_pager_pagertitlestrip_standard"
+        />
 
+    <LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+        <include layout="@layout/material_view_pager_placeholder"/>
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <ProgressBar
+                android:id="@+id/fragment_films_progress"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                style="?android:progressBarStyleLarge"/>
+
+            <tr.xip.errorview.ErrorView
+                android:id="@+id/fragment_films_error_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                />
+        </FrameLayout>
+    </LinearLayout>
+
+</FrameLayout>
+<!--
 </LinearLayout>
-
+-->

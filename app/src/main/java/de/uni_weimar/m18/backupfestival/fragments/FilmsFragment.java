@@ -1,24 +1,46 @@
 package de.uni_weimar.m18.backupfestival.fragments;
 
+import android.annotation.TargetApi;
+import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.ActivityOptionsCompat;
+
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 
-import java.util.ArrayList;
+import com.github.florent37.materialviewpager.MaterialViewPagerHeaderView;
+import com.github.florent37.materialviewpager.MaterialViewPagerHelper;
+import com.github.florent37.materialviewpager.adapter.RecyclerViewMaterialAdapter;
 
+import java.util.List;
+
+import de.uni_weimar.m18.backupfestival.other.OnItemClickListener;
 import de.uni_weimar.m18.backupfestival.R;
-import de.uni_weimar.m18.backupfestival.models.ImageModel;
-import de.uni_weimar.m18.backupfestival.network.UnsplashApi;
+import de.uni_weimar.m18.backupfestival.activities.FilmDetailActivity;
+import de.uni_weimar.m18.backupfestival.activities.MainActivity;
+import de.uni_weimar.m18.backupfestival.models.FilmModel;
+import de.uni_weimar.m18.backupfestival.network.WpJsonApi;
+import de.uni_weimar.m18.backupfestival.views.adapters.FilmAdapter;
+import retrofit.RetrofitError;
+import rx.Observer;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 import tr.xip.errorview.ErrorView;
+import tr.xip.errorview.RetryListener;
 
 /**
  * Created by Jan Frederick Eick on 28.04.2015.
@@ -40,13 +62,16 @@ public class FilmsFragment extends Fragment {
 
     public static SparseArray<Bitmap> photoCache = new SparseArray<>(1);
 
-    private UnsplashApi mApi = new UnsplashApi();
+    private WpJsonApi mApi = new WpJsonApi();
+    private List<FilmModel> mImages;
 
-    private ArrayList<ImageModel> mImages;
-    private ArrayList<ImageModel> mCurrentImages;
+    private List<FilmModel> mCurrentImages;
+    private FilmAdapter mFilmAdapter;
+
     private RecyclerView mRecyclerView;
-    private ProgressBar mProgressBar;
-    private ErrorView mErrorView;
+
+    //private ProgressBar mProgressBar;
+    //private ErrorView mErrorView;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -59,8 +84,6 @@ public class FilmsFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_films, container, false);
 
         mRecyclerView = (RecyclerView) rootView.findViewById(R.id.fragment_last_films_recycler);
-        mProgressBar = (ProgressBar) rootView.findViewById(R.id.fragment_films_progress);
-        mErrorView = (ErrorView) rootView.findViewById(R.id.fragment_films_error_view);
 
         GridLayoutManager gridLayoutManager = new GridLayoutManager(getActivity(), 1);
         mRecyclerView.setLayoutManager(gridLayoutManager);
@@ -71,8 +94,19 @@ public class FilmsFragment extends Fragment {
             }
         });
 
-        // TODO: set image adapter stuff
+        mFilmAdapter = new FilmAdapter();
+        // TODO: readd this for row click listener
+        mFilmAdapter.setOnItemClickListener(recyclerRowClickListener);
 
+        mRecyclerView.setHasFixedSize(true);
+
+        // TODO: I have no idea why, but this fixes the issue of the recycler view rendered behind the MaterialViewPager
+        mRecyclerView.setAdapter(new RecyclerViewMaterialAdapter(mFilmAdapter, 1));
+        //mRecyclerView.setAdapter(mFilmAdapter);
+
+        MaterialViewPagerHelper.registerRecyclerView(getActivity(), mRecyclerView, null);
+
+        updateAdapter();
         return rootView;
     }
 
@@ -81,15 +115,68 @@ public class FilmsFragment extends Fragment {
         super.onResume();
     }
 
-    private void showAll() {
-        if (mImages != null) {
-            updateAdapter(mImages);
-        } else {
-            mProgressBar.setVisibility(View.VISIBLE);
-            mRecyclerView.setVisibility(View.GONE);
-            mErrorView.setVisibility(View.GONE);
+    public static FilmsFragment newInstance() {
+        FilmsFragment fragment = new FilmsFragment();
+        return fragment;
+    }
 
 
+    private OnItemClickListener recyclerRowClickListener = new OnItemClickListener() {
+        @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
+        @Override
+        public void onClick(View v, int position) {
+            FilmModel selectedFilm = mCurrentImages.get(position - 1);
+
+            Intent filmDetailIntent = new Intent(getActivity(), FilmDetailActivity.class);
+            filmDetailIntent.putExtra("position", position);
+            filmDetailIntent.putExtra("selected_film", selectedFilm);
+
+            if (selectedFilm.getSwatch() != null) {
+                filmDetailIntent.putExtra("swatch_title_text_color",
+                        selectedFilm.getSwatch().getTitleTextColor());
+                filmDetailIntent.putExtra("swatch_body_text_color",
+                        selectedFilm.getSwatch().getBodyTextColor());
+                filmDetailIntent.putExtra("swatch_rgb",
+                        selectedFilm.getSwatch().getRgb());
+            }
+
+            ImageView coverImage = (ImageView) v.findViewById(R.id.item_image_img);
+            if(coverImage == null) {
+                coverImage = (ImageView) ((View) v.getParent()).findViewById(R.id.item_image_img);
+            }
+
+            if (Build.VERSION.SDK_INT >= 21) {
+                if (coverImage.getParent() != null) {
+                    ((ViewGroup) coverImage.getParent()).setTransitionGroup(false);
+                }
+            }
+
+            if (coverImage != null && coverImage.getDrawable() != null) {
+                Bitmap bitmap = ((BitmapDrawable) coverImage.getDrawable()).getBitmap(); // wtf? ew
+                if (bitmap != null && !bitmap.isRecycled()) {
+                    photoCache.put(position, bitmap);
+
+                    // setup transition to detail activity
+                    ActivityOptionsCompat options =
+                            ActivityOptionsCompat.makeSceneTransitionAnimation(getActivity(),
+                                    coverImage, "cover");
+
+                    //startActivity(filmDetailIntent, options.toBundle());
+                    // TODO: fix this!
+                    ActivityCompat.startActivity(getActivity(), filmDetailIntent, options.toBundle());
+                }
+            }
         }
+    };
+
+
+    public void updateFilms(List<FilmModel> films) {
+        mCurrentImages = films;
+    }
+
+    public void updateAdapter() {
+        mFilmAdapter.updateData(mCurrentImages);
+        mFilmAdapter.notifyDataSetChanged();
+        mRecyclerView.scrollToPosition(0);
     }
 }

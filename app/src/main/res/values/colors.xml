@@ -4,6 +4,8 @@
     <color name="image_without_palette">#1C1D23</color>
     <color name="text_without_palette">#ffeae1da</color>
 
+    <color name="secondary_text_without_palette">#ffcdc5bf</color>
+
     <!-- default theme colors -->
     <color name="primary">#212121</color>
     <color name="primary_dark">#000000</color>

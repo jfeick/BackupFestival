@@ -106,6 +106,14 @@ public class ImageModel implements Serializable{
         return modified_date;
     }
 
+    public String getReadableModified_Date() {
+        if (modified_date != null) {
+            return sdf.format(modified_date);
+        } else {
+            return "";
+        }
+    }
+
     public void setModifiedDate(Date modified_date) {
         this.modified_date = modified_date;
     }

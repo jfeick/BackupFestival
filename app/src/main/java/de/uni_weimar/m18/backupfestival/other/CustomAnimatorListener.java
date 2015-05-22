@@ -1,7 +1,9 @@
-package de.uni_weimar.m18.backupfestival.views.adapters;
+package de.uni_weimar.m18.backupfestival.other;
+
+import android.animation.Animator;
 
 /**
- * Created by Jan Frederick Eick on 29.04.2015.
+ * Created by Jan Frederick Eick on 01.05.2015.
  * Copyright 2015 Jan Frederick Eick
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,6 +17,25 @@ package de.uni_weimar.m18.backupfestival.views.adapters;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-public class ImageAdapter {
 
+public class CustomAnimatorListener implements Animator.AnimatorListener {
+    @Override
+    public void onAnimationStart(Animator animation) {
+
+    }
+
+    @Override
+    public void onAnimationEnd(Animator animation) {
+
+    }
+
+    @Override
+    public void onAnimationCancel(Animator animation) {
+
+    }
+
+    @Override
+    public void onAnimationRepeat(Animator animation) {
+
+    }
 }

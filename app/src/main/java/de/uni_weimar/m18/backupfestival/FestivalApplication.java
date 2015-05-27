@@ -3,6 +3,8 @@ package de.uni_weimar.m18.backupfestival;
 import android.app.Application;
 import android.content.Context;
 
+import com.squareup.leakcanary.LeakCanary;
+
 /**
  * Created by Jan Frederick Eick on 28.04.2015.
  * Copyright 2015 Jan Frederick Eick
@@ -29,6 +31,7 @@ public class FestivalApplication extends Application {
     public void onCreate() {
         super.onCreate();
         context = getApplicationContext();
+        LeakCanary.install(this);
     }
 
     @Override

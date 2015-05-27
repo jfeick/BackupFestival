@@ -14,6 +14,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -22,6 +23,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 
+import com.github.florent37.materialviewpager.MaterialViewPagerAnimator;
 import com.github.florent37.materialviewpager.MaterialViewPagerHeaderView;
 import com.github.florent37.materialviewpager.MaterialViewPagerHelper;
 import com.github.florent37.materialviewpager.adapter.RecyclerViewMaterialAdapter;
@@ -104,10 +106,21 @@ public class FilmsFragment extends Fragment {
         mRecyclerView.setAdapter(new RecyclerViewMaterialAdapter(mFilmAdapter, 1));
         //mRecyclerView.setAdapter(mFilmAdapter);
 
-        MaterialViewPagerHelper.registerRecyclerView(getActivity(), mRecyclerView, null);
+        //MaterialViewPagerHelper.registerRecyclerView(getActivity(), mRecyclerView, null);
+        MaterialViewPagerAnimator animator = MaterialViewPagerHelper.getAnimator(getActivity());
+        animator.registerRecyclerView(mRecyclerView, null);
+
 
         updateAdapter();
         return rootView;
+    }
+
+    @Override
+    public void onDetach() {
+        MaterialViewPagerAnimator animator = MaterialViewPagerHelper.getAnimator(getActivity());
+        animator.unregisterRecyclerView(mRecyclerView);
+        mRecyclerView = null;
+        super.onDetach();
     }
 
     @Override
@@ -119,7 +132,6 @@ public class FilmsFragment extends Fragment {
         FilmsFragment fragment = new FilmsFragment();
         return fragment;
     }
-
 
     private OnItemClickListener recyclerRowClickListener = new OnItemClickListener() {
         @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
@@ -176,7 +188,7 @@ public class FilmsFragment extends Fragment {
 
     public void updateAdapter() {
         mFilmAdapter.updateData(mCurrentImages);
-        mFilmAdapter.notifyDataSetChanged();
+        //mFilmAdapter.notifyDataSetChanged();
         mRecyclerView.scrollToPosition(0);
     }
 }

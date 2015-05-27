@@ -1,6 +1,8 @@
 package de.uni_weimar.m18.backupfestival.activities;
 
-import android.graphics.Color;
+import android.animation.LayoutTransition;
+import android.app.SearchManager;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -9,7 +11,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.SearchView;
 
 import com.github.florent37.materialviewpager.MaterialViewPager;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
@@ -190,12 +194,26 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        menu.findItem(R.id.action_settings).setIcon(
-                new IconicsDrawable(this, GoogleMaterial.Icon.gmd_settings)
+        getMenuInflater().inflate(R.menu.menu_films, menu);
+        /*
+        menu.findItem(R.id.action_films_search).setIcon(
+                new IconicsDrawable(this, GoogleMaterial.Icon.gmd_search)
                         .color(Color.LTGRAY)
                         .actionBarSize()
         );
+        */
+
+        // Associate searchable configuration with the SearchView
+        SearchManager searchManager =
+                (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        MenuItem searchMenuItem = menu.findItem(R.id.action_films_search);
+        SearchView searchView = (SearchView) searchMenuItem.getActionView();
+
+        //SearchView searchView =
+        //        (SearchView) menu.findItem(R.id.action_films_search).getActionView();
+        //searchView.setSearchableInfo(
+        //        searchManager.getSearchableInfo(getComponentName()));
+
         return true;
     }
 

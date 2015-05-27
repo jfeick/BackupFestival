@@ -17,6 +17,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.squareup.picasso.Callback;
+import com.squareup.picasso.MemoryPolicy;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -92,6 +93,8 @@ public class FilmAdapter extends RecyclerView.Adapter<ImagesViewHolder> {
         return new ImagesViewHolder(rowView, onItemClickListener);
     }
 
+
+
     @Override
     public void onBindViewHolder(final ImagesViewHolder holder, final int position) {
 
@@ -113,7 +116,7 @@ public class FilmAdapter extends RecyclerView.Adapter<ImagesViewHolder> {
         Picasso.with(mContext).cancelRequest(holder.imageView);
         // load image
         Picasso.with(mContext).load(mImages.get(position).getImageSrc())
-                .transform(new GradientTransformation(gradientColor))
+                //.transform(new GradientTransformation(gradientColor))
                 .transform(PaletteTransformation.instance()).into(holder.imageView,
                 new Callback.EmptyCallback() {
                     @Override
@@ -179,6 +182,8 @@ public class FilmAdapter extends RecyclerView.Adapter<ImagesViewHolder> {
         // NEVER CALLED???
         return mImages.size();
     }
+
+
 }
 
 class ImagesViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {

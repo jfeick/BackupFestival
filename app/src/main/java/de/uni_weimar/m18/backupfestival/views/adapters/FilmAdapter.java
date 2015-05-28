@@ -17,12 +17,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.squareup.picasso.Callback;
-import com.squareup.picasso.MemoryPolicy;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
-import de.uni_weimar.m18.backupfestival.other.GradientTransformation;
 import de.uni_weimar.m18.backupfestival.other.OnItemClickListener;
 import de.uni_weimar.m18.backupfestival.R;
 import de.uni_weimar.m18.backupfestival.models.FilmModel;
@@ -76,7 +74,7 @@ public class FilmAdapter extends RecyclerView.Adapter<ImagesViewHolder> {
     @Override
     public ImagesViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View rowView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.item_image, parent, false);
+                .inflate(R.layout.item_film, parent, false);
 
         // set the context
         this.mContext = parent.getContext();

@@ -12,8 +12,8 @@ import java.util.List;
 
 import de.uni_weimar.m18.backupfestival.FestivalApplication;
 import de.uni_weimar.m18.backupfestival.R;
+import de.uni_weimar.m18.backupfestival.models.EventModel;
 import de.uni_weimar.m18.backupfestival.models.FilmModel;
-import de.uni_weimar.m18.backupfestival.models.ImageListModel;
 import retrofit.RequestInterceptor;
 import retrofit.RestAdapter;
 import retrofit.client.OkClient;
@@ -56,7 +56,7 @@ public class WpJsonApi {
 
         try {
             File cacheDir = new File(
-                    FestivalApplication.getContext().getCacheDir().getPath(), "pictures.json");
+                    FestivalApplication.getContext().getCacheDir().getPath(), "data.json");
             cache = new Cache(cacheDir, 10 * 1024 * 1024);
             okHttpClient = new OkHttpClient();
             okHttpClient.setCache(cache);
@@ -82,11 +82,22 @@ public class WpJsonApi {
 
     public interface WpJsonService {
         @GET("/posts")
-        Observable<List<FilmModel>> getPosts(@Query("type[]") String type,
-                                           @Query("filter[posts_per_page]") int posts_per_page);
+        Observable<List<FilmModel>> getFilms(@Query("type[]") String type,
+                                             @Query("filter[posts_per_page]") int posts_per_page);
+
+        @GET("/posts")
+        Observable<List<EventModel>> getEvents(@Query("type[]") String type,
+                                               @Query("filter[posts_per_page]") int posts_per_page);
     }
 
+
+
+
+
     public Observable<List<FilmModel>> fetchFilms() {
-        return mWebService.getPosts("film", 200);
+        return mWebService.getFilms("film", 300);
+    }
+    public Observable<List<EventModel>> fetchEvents() {
+        return mWebService.getEvents("event", 300);
     }
 }

@@ -7,11 +7,14 @@
     <!-- Drawer Items -->
     <string name="drawer_events">Events</string>
     <string name="drawer_films">Films</string>
-    <string name="API_ENDPOINT">http://backup-festival.de/2014/wp-json</string>
+    <string name="API_ENDPOINT">http://backup-festival.de/2015/wp-json</string>
 
 <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="hello_blank_fragment">Dummy Fragment</string>
     <string name="search_title">search</string>
     <string name="search_hint">movie title</string>
+    <string name="drawer_news">News</string>
+    <string name="drawer_map">Map</string>
+    <string name="drawer_social">Social</string>
 
 </resources>

@@ -1,24 +1,19 @@
 package de.uni_weimar.m18.backupfestival.views.adapters;
 
 
-import android.graphics.drawable.Drawable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.util.SparseArray;
-import android.view.View;
 import android.view.ViewGroup;
 
 import com.github.florent37.materialviewpager.MaterialViewPager;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import de.uni_weimar.m18.backupfestival.FestivalApplication;
 import de.uni_weimar.m18.backupfestival.R;
-import de.uni_weimar.m18.backupfestival.fragments.FilmsFragment;
+import de.uni_weimar.m18.backupfestival.fragments.FilmsRecyclerViewFragment;
 import de.uni_weimar.m18.backupfestival.models.FilmModel;
 
 /**
@@ -34,7 +29,7 @@ public class FilmsPagerAdapter extends FragmentStatePagerAdapter {
     private ArrayList<Integer> mTabColors = new ArrayList<>();
     private ArrayList<Integer> mTabImages = new ArrayList<>();
 
-    private ArrayList<FilmsFragment> mFilmsFragments = new ArrayList<>();
+    private ArrayList<FilmsRecyclerViewFragment> mFilmsRecyclerViewFragments = new ArrayList<>();
     private MaterialViewPager mViewPager;
     private int mOldPosition = -1;
 
@@ -42,7 +37,7 @@ public class FilmsPagerAdapter extends FragmentStatePagerAdapter {
                              MaterialViewPager viewPager) {
         super(fragmentManager);
         mViewPager = viewPager;
-        //mFilmsFragments = new ArrayList<>();
+        //mFilmsRecyclerViewFragments = new ArrayList<>();
         //mFilmsDataModels = new ArrayList<>();
         //mTabTitles = new ArrayList<>();
     }
@@ -70,7 +65,7 @@ public class FilmsPagerAdapter extends FragmentStatePagerAdapter {
 
     @Override
     public int getCount() {
-        return mFilmsFragments.size();
+        return mFilmsRecyclerViewFragments.size();
     }
 
     @Override
@@ -78,17 +73,17 @@ public class FilmsPagerAdapter extends FragmentStatePagerAdapter {
         if (position >= mFilmsDataModels.size())
             return null;
         /*
-        FilmsFragment filmsFragment = mFilmsFragments.get(position);
-        if (filmsFragment == null) {
-            filmsFragment = FilmsFragment.newInstance();
-            filmsFragment.updateFilms(mFilmsDataModels.get(position));
-            mFilmsFragments.set(position, filmsFragment);
+        FilmsRecyclerViewFragment filmsRecyclerViewFragment = mFilmsRecyclerViewFragments.get(position);
+        if (filmsRecyclerViewFragment == null) {
+            filmsRecyclerViewFragment = FilmsRecyclerViewFragment.newInstance();
+            filmsRecyclerViewFragment.updateFilms(mFilmsDataModels.get(position));
+            mFilmsRecyclerViewFragments.set(position, filmsRecyclerViewFragment);
         }
-        return filmsFragment;
+        return filmsRecyclerViewFragment;
         */
-        FilmsFragment filmsFragment = FilmsFragment.newInstance();
-        filmsFragment.updateFilms(mFilmsDataModels.get(position));
-        return filmsFragment;
+        FilmsRecyclerViewFragment filmsRecyclerViewFragment = FilmsRecyclerViewFragment.newInstance();
+        filmsRecyclerViewFragment.updateFilms(mFilmsDataModels.get(position));
+        return filmsRecyclerViewFragment;
     }
 
     @Override
@@ -199,9 +194,9 @@ public class FilmsPagerAdapter extends FragmentStatePagerAdapter {
         mTabColors.add(R.color.films_award_red);
         mTabImages.add(R.drawable.red);
 
-        mFilmsFragments.clear();
+        mFilmsRecyclerViewFragments.clear();
         for (int i = 0; i < mFilmsDataModels.size(); ++i) {
-            mFilmsFragments.add(null);
+            mFilmsRecyclerViewFragments.add(null);
         }
         notifyDataSetChanged();
     }

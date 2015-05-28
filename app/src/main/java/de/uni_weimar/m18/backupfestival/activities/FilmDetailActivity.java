@@ -3,8 +3,6 @@ package de.uni_weimar.m18.backupfestival.activities;
 import android.animation.Animator;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -19,11 +17,8 @@ import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.mikepenz.iconics.IconicsDrawable;
-import com.mikepenz.iconics.typeface.FontAwesome;
-
 import de.uni_weimar.m18.backupfestival.R;
-import de.uni_weimar.m18.backupfestival.fragments.FilmsFragment;
+import de.uni_weimar.m18.backupfestival.fragments.FilmsRecyclerViewFragment;
 import de.uni_weimar.m18.backupfestival.models.FilmModel;
 import de.uni_weimar.m18.backupfestival.other.CustomAnimatorListener;
 import de.uni_weimar.m18.backupfestival.other.CustomTransitionListener;
@@ -87,7 +82,7 @@ public class FilmDetailActivity extends AppCompatActivity {
 
         // get the imageHeader and set the coverImage
         final ImageView image = (ImageView) findViewById(R.id.activity_detail_image);
-        Bitmap imageCoverBitmap = FilmsFragment.photoCache.get(position);
+        Bitmap imageCoverBitmap = FilmsRecyclerViewFragment.photoCache.get(position);
         //safety check to prevent nullPointer in the palette if the detailActivity was in the background for too long
         if (imageCoverBitmap == null || imageCoverBitmap.isRecycled()) {
             this.finish();

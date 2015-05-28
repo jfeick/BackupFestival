@@ -3,6 +3,7 @@ package de.uni_weimar.m18.backupfestival;
 import android.app.Application;
 import android.content.Context;
 
+import com.mikepenz.materialdrawer.Drawer;
 import com.squareup.leakcanary.LeakCanary;
 
 /**
@@ -23,8 +24,19 @@ import com.squareup.leakcanary.LeakCanary;
 public class FestivalApplication extends Application {
     private static Context context;
 
+    private static Drawer.Result drawer = null;
+
+
     public static Context getContext() {
         return context;
+    }
+
+    public static Drawer.Result getDrawer() {
+        return drawer;
+    }
+
+    public static void setDrawer(Drawer.Result drawer) {
+        FestivalApplication.drawer = drawer;
     }
 
     @Override

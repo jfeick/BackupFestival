@@ -1,8 +1,6 @@
 package de.uni_weimar.m18.backupfestival.fragments;
 
 import android.app.Activity;
-import android.app.SearchManager;
-import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
@@ -12,11 +10,9 @@ import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
-import android.widget.SearchView;
 
 import com.github.florent37.materialviewpager.MaterialViewPager;
 import com.mikepenz.materialdrawer.Drawer;
@@ -25,9 +21,9 @@ import java.util.List;
 
 import de.uni_weimar.m18.backupfestival.FestivalApplication;
 import de.uni_weimar.m18.backupfestival.R;
-import de.uni_weimar.m18.backupfestival.models.FilmModel;
+import de.uni_weimar.m18.backupfestival.models.EventModel;
 import de.uni_weimar.m18.backupfestival.network.WpJsonApi;
-import de.uni_weimar.m18.backupfestival.views.adapters.FilmsPagerAdapter;
+import de.uni_weimar.m18.backupfestival.views.adapters.EventsPagerAdapter;
 import retrofit.RetrofitError;
 import rx.Observer;
 import rx.android.schedulers.AndroidSchedulers;
@@ -36,23 +32,23 @@ import tr.xip.errorview.ErrorView;
 import tr.xip.errorview.RetryListener;
 
 
-public class FilmsFragment extends Fragment {
+public class EventsFragment extends Fragment {
     private MaterialViewPager mViewPager;
 
     private WpJsonApi mApi = new WpJsonApi();
-    private List<FilmModel> mImages;
+    private List<EventModel> mEventList;
 
     private ProgressBar mProgressBar;
     private ErrorView mErrorView;
 
     private Toolbar mToolbar;
 
-    public static FilmsFragment newInstance() {
-        FilmsFragment fragment = new FilmsFragment();
+    public static EventsFragment newInstance() {
+        EventsFragment fragment = new EventsFragment();
         return fragment;
     }
 
-    public FilmsFragment() {
+    public EventsFragment() {
         // Required empty public constructor
     }
 
@@ -67,14 +63,14 @@ public class FilmsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View rootView = inflater.inflate(R.layout.fragment_films, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_events, container, false);
 
         setHasOptionsMenu(true);
 
         mViewPager = (MaterialViewPager) rootView.findViewById(R.id.materialViewPager);
 
-        mProgressBar = (ProgressBar) rootView.findViewById(R.id.fragment_films_progress);
-        mErrorView = (ErrorView) rootView.findViewById(R.id.fragment_films_error_view);
+        mProgressBar = (ProgressBar) rootView.findViewById(R.id.fragment_events_progress);
+        mErrorView = (ErrorView) rootView.findViewById(R.id.fragment_events_error_view);
 
         mToolbar = mViewPager.getToolbar();
 
@@ -89,7 +85,7 @@ public class FilmsFragment extends Fragment {
             actionBar.setHomeButtonEnabled(true);
         }
 
-        FilmsPagerAdapter adapterViewPager = new FilmsPagerAdapter(getActivity().getSupportFragmentManager(), mViewPager);
+        EventsPagerAdapter adapterViewPager = new EventsPagerAdapter(getActivity().getSupportFragmentManager(), mViewPager);
         mViewPager.getViewPager().setAdapter(adapterViewPager);
         mViewPager.getPagerTitleStrip().setViewPager(mViewPager.getViewPager());
 
@@ -105,21 +101,21 @@ public class FilmsFragment extends Fragment {
     }
 
     private void showAll() {
-        if (mImages != null) {
-            updateViewPager(mImages);
+        if (mEventList != null) {
+            updateViewPager(mEventList);
         } else {
             mProgressBar.setVisibility(View.VISIBLE);
             //mRecyclerView.setVisibility(View.GONE);
             mErrorView.setVisibility(View.GONE);
 
             // fetch images from API
-            mApi.fetchFilms().cache().subscribeOn(Schedulers.newThread())
+            mApi.fetchEvents().cache().subscribeOn(Schedulers.newThread())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(observer);
         }
     }
 
-    private Observer<List<FilmModel>> observer = new Observer<List<FilmModel>>() {
+    private Observer<List<EventModel>> observer = new Observer<List<EventModel>>() {
         @Override
         public void onCompleted() {
             mProgressBar.setVisibility(View.GONE);
@@ -157,24 +153,20 @@ public class FilmsFragment extends Fragment {
         }
 
         @Override
-        public void onNext(List<FilmModel> filmModelList) {
-            mImages = null;
-            mImages = filmModelList;
-            updateViewPager(mImages);
-
-            //if (FilmsRecyclerViewFragment.this.getActivity() instanceof MainActivity) {
-            // TODO: set category count?
-            //}
+        public void onNext(List<EventModel> eventModelList) {
+            mEventList = null;
+            mEventList = eventModelList;
+            updateViewPager(mEventList);
 
         }
     };
 
-    private void updateViewPager(List<FilmModel> images) {
-        FilmsPagerAdapter adapter = (FilmsPagerAdapter)(mViewPager.getViewPager().getAdapter());
-        adapter.updateData(images);
+    private void updateViewPager(List<EventModel> events) {
+        EventsPagerAdapter adapter = (EventsPagerAdapter)(mViewPager.getViewPager().getAdapter());
+        adapter.updateData(events);
 
-        //mCurrentImages = images;
-        //mFilmAdapter.updateData(mCurrentImages);
+        //mCurrentEvents = events;
+        //mEventsAdapter.updateData(mCurrent);
         //mRecyclerView.scrollToPosition(0);
     }
 
@@ -192,22 +184,8 @@ public class FilmsFragment extends Fragment {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        inflater.inflate(R.menu.menu_films, menu);
+        //inflater.inflate(R.menu.menu_events, menu);
 
-        /*
-        menu.findItem(R.id.action_films_search).setIcon(
-                new IconicsDrawable(getActivity(), GoogleMaterial.Icon.gmd_search)
-                        .color(Color.LTGRAY)
-                        .actionBarSize()
-        );
-        */
-
-        // Associate searchable configuration with the SearchView
-        SearchManager searchManager =
-                (SearchManager) getActivity().getSystemService(Context.SEARCH_SERVICE);
-        MenuItem searchMenuItem = menu.findItem(R.id.action_films_search);
-        SearchView searchView = (SearchView) searchMenuItem.getActionView();
-        super.onCreateOptionsMenu(menu, inflater);
     }
 
     private void setToolbar() {
@@ -246,7 +224,7 @@ public class FilmsFragment extends Fragment {
 
                 @Override
                 public void onDrawerSlide(View drawerView, float slideOffset) {
-                   if (!true) {
+                    if (!true) {
                         super.onDrawerSlide(drawerView, 0);
                     } else {
                         super.onDrawerSlide(drawerView, slideOffset);
